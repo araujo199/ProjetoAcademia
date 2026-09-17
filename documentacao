@@ -1,0 +1,826 @@
+DOCUMENTAÇÃO DO PROJETO
+
+ACADEMIA – CONTROLE DE TREINOS E FREQUÊNCIA
+
+Disciplina: Algoritmos e Estrutura de Dados I
+Curso: Engenharia de Software
+Linguagem: C – C11
+
+⸻
+
+1. INTRODUÇÃO
+
+O projeto Academia – Controle de Treinos e Frequência foi desenvolvido em linguagem C com o objetivo de aplicar conceitos fundamentais de Algoritmos e Estruturas de Dados.
+
+O sistema permite cadastrar rotinas de treinamento, consultar as rotinas cadastradas, remover rotinas, registrar presenças ou faltas e consultar o histórico de frequência. Também é possível calcular o percentual geral de comparecimento e o percentual individual por rotina.
+
+Durante o desenvolvimento foram utilizados conceitos como:
+
+* Modularização;
+* Funções;
+* Passagem de parâmetros por valor;
+* Passagem de parâmetros por referência utilizando ponteiros;
+* Tipos Abstratos de Dados (TAD);
+* Alocação estática;
+* Alocação dinâmica;
+* Lista sequencial;
+* Lista simplesmente encadeada;
+* Recursividade;
+* Manipulação de strings;
+* Gerenciamento de memória.
+
+O projeto foi estruturado de forma que as responsabilidades sejam distribuídas entre diferentes funções, facilitando a manutenção, compreensão e reutilização do código.
+
+⸻
+
+2. OBJETIVO DO SISTEMA
+
+O objetivo principal do sistema é fornecer uma ferramenta simples para gerenciamento de treinos e acompanhamento da frequência de um usuário em uma academia.
+
+O sistema permite:
+
+1. Cadastrar uma rotina de treino;
+2. Listar as rotinas cadastradas;
+3. Remover uma rotina;
+4. Registrar presença ou falta;
+5. Consultar o histórico de frequência;
+6. Calcular o percentual geral de comparecimento;
+7. Calcular o percentual de comparecimento por rotina.
+
+Além da funcionalidade prática, o projeto tem como finalidade demonstrar a aplicação dos conceitos estudados na disciplina de Algoritmos e Estrutura de Dados I.
+
+⸻
+
+3. REQUISITOS FUNCIONAIS
+
+RF01 – Cadastrar rotina
+
+O sistema deve permitir o cadastro de uma rotina contendo:
+
+* ID;
+* Nome da rotina;
+* Grupo muscular principal;
+* Duração em minutos.
+
+Cada rotina recebe automaticamente um identificador numérico.
+
+⸻
+
+RF02 – Listar rotinas
+
+O sistema deve apresentar todas as rotinas cadastradas, mostrando:
+
+* ID;
+* Nome;
+* Grupo muscular;
+* Duração.
+
+O sistema também deve informar a quantidade total de rotinas cadastradas.
+
+⸻
+
+RF03 – Remover rotina
+
+O sistema deve permitir a remoção de uma rotina utilizando seu ID.
+
+Quando uma rotina é removida, os registros de frequência associados a ela não são apagados. Dessa maneira, o histórico permanece preservado.
+
+⸻
+
+RF04 – Registrar frequência
+
+O usuário pode registrar:
+
+* Presença;
+* Falta.
+
+Para realizar o registro é necessário informar:
+
+* ID da rotina;
+* Data;
+* Situação de comparecimento.
+
+⸻
+
+RF05 – Exibir histórico
+
+O sistema apresenta todos os registros de frequência armazenados, contendo:
+
+* Data;
+* Rotina;
+* Status.
+
+Quando a rotina relacionada a um registro foi removida, o sistema apresenta a indicação ”(rotina removida)”.
+
+⸻
+
+RF06 – Calcular percentual de comparecimento
+
+O sistema calcula o percentual geral de comparecimento utilizando a quantidade de presenças em relação ao total de registros.
+
+A fórmula utilizada é:
+
+Percentual = (Número de presenças / Número de registros) × 100
+
+⸻
+
+RF07 – Calcular percentual por rotina
+
+O sistema também permite calcular o percentual de comparecimento individualmente para cada rotina que possua registros.
+
+⸻
+
+4. REQUISITOS NÃO FUNCIONAIS
+
+RNF01 – Linguagem
+
+O sistema foi desenvolvido em linguagem C, utilizando o padrão C11.
+
+RNF02 – Interface
+
+A aplicação utiliza uma interface textual executada diretamente pelo terminal.
+
+RNF03 – Gerenciamento de memória
+
+Os registros de frequência utilizam alocação dinâmica por meio da função malloc() e são liberados utilizando free(). A utilização de malloc() permite reservar memória durante a execução do programa, enquanto free() devolve essa memória ao sistema. (Cppreference)
+
+RNF04 – Estrutura de dados
+
+O sistema utiliza duas estruturas principais:
+
+* Vetor de tamanho fixo para as rotinas;
+* Lista simplesmente encadeada para o histórico.
+
+RNF05 – Validação
+
+O sistema realiza validações básicas para evitar dados inválidos, como:
+
+* Nome vazio;
+* Duração menor ou igual a zero;
+* Rotina inexistente;
+* Data com tamanho incorreto;
+* Lista de rotinas cheia.
+
+⸻
+
+5. ARQUITETURA DO SISTEMA
+
+O programa pode ser dividido em três camadas principais:
+
+5.1 Camada de dados
+
+Responsável pelas estruturas e operações dos TADs:
+
+* ListaRotinas;
+* HistoricoPresencas.
+
+5.2 Camada de regras
+
+Responsável pelas operações de:
+
+* Cadastro;
+* Remoção;
+* Registro de frequência;
+* Cálculo de percentuais;
+* Percurso recursivo.
+
+5.3 Camada de interface
+
+Responsável pela interação com o usuário através do terminal.
+
+Exemplos:
+
+* interface_executar();
+* acaoCadastrarRotina();
+* acaoRemoverRotina();
+* acaoRegistrarPresenca();
+* acaoExibirHistorico();
+* acaoExibirPercentual().
+
+A separação das responsabilidades contribui para a modularização e facilita futuras alterações no sistema.
+
+⸻
+
+6. TIPOS ABSTRATOS DE DADOS
+
+O projeto possui dois TADs principais.
+
+6.1 TAD ListaRotinas
+
+Representa uma lista sequencial de rotinas.
+
+Sua estrutura é:
+
+typedef struct {
+    Rotina itens[MAX_ROTINAS];
+    int quantidade;
+    int proximoId;
+} ListaRotinas;
+
+A estrutura possui:
+
+* itens: vetor contendo as rotinas;
+* quantidade: quantidade atual de rotinas;
+* proximoId: próximo identificador disponível.
+
+O tamanho máximo definido é:
+
+#define MAX_ROTINAS 50
+
+Portanto, podem existir no máximo 50 rotinas simultaneamente.
+
+⸻
+
+7. ESTRUTURA DA ROTINA
+
+Cada rotina é representada pela estrutura:
+
+typedef struct {
+    int id;
+    char nome[TAM_NOME];
+    char grupoMuscular[TAM_GRUPO];
+    int duracaoMin;
+} Rotina;
+
+Os campos são:
+
+Campo	Tipo	Descrição
+id	int	Identificador da rotina
+nome	char[]	Nome do treino
+grupoMuscular	char[]	Grupo muscular principal
+duracaoMin	int	Duração do treino
+
+⸻
+
+8. TAD HISTORICO PRESENCAS
+
+O histórico utiliza uma lista simplesmente encadeada.
+
+Cada elemento da lista é representado por:
+
+typedef struct Presenca {
+    int idRotina;
+    char data[TAM_DATA];
+    int compareceu;
+    struct Presenca *prox;
+} Presenca;
+
+Cada nó possui:
+
+* ID da rotina;
+* Data;
+* Informação de presença ou falta;
+* Ponteiro para o próximo nó.
+
+A estrutura principal é:
+
+typedef struct {
+    Presenca *inicio;
+    Presenca *fim;
+    int totalRegistros;
+    int totalPresencas;
+} HistoricoPresencas;
+
+Os ponteiros inicio e fim permitem controlar o início e o final da lista.
+
+O ponteiro fim possibilita realizar inserções no final sem precisar percorrer toda a lista.
+
+⸻
+
+9. ALOCAÇÃO ESTÁTICA
+
+A lista de rotinas utiliza armazenamento estático por meio de um vetor:
+
+Rotina itens[MAX_ROTINAS];
+
+Como MAX_ROTINAS possui valor 50, o espaço necessário para as rotinas é definido previamente.
+
+Essa abordagem possui como vantagem a simplicidade, porém apresenta uma limitação: a quantidade máxima de rotinas é fixa.
+
+⸻
+
+10. ALOCAÇÃO DINÂMICA
+
+O histórico utiliza alocação dinâmica.
+
+Quando uma nova presença ou falta é registrada, o programa executa:
+
+Presenca *novo = (Presenca *) malloc(sizeof(Presenca));
+
+Isso cria um novo espaço de memória para armazenar o registro.
+
+Se não houver memória disponível, malloc() retorna NULL, e o programa trata essa situação como erro de alocação. A memória reservada deve posteriormente ser liberada, o que é realizado pelo programa com free(). (Cppreference)
+
+⸻
+
+11. INSERÇÃO NA LISTA ENCADEADA
+
+A função:
+
+historico_registrar()
+
+é responsável por inserir um novo registro no histórico.
+
+Quando a lista está vazia:
+
+if (h->fim == NULL) {
+    h->inicio = novo;
+    h->fim = novo;
+}
+
+Quando já existem elementos:
+
+h->fim->prox = novo;
+h->fim = novo;
+
+Dessa forma, a inserção ocorre diretamente no final da lista utilizando o ponteiro fim.
+
+A operação de inserção no final possui complexidade O(1).
+
+⸻
+
+12. MODULARIZAÇÃO
+
+O código foi dividido em funções específicas, evitando concentrar todas as operações dentro da função main().
+
+Exemplos:
+
+rotinas_iniciar()
+rotinas_inserir()
+rotinas_buscar_indice()
+rotinas_remover()
+rotinas_listar()
+
+Para o histórico:
+
+historico_iniciar()
+historico_registrar()
+historico_percentual()
+historico_percentual_por_rotina()
+historico_presencas_recursivo()
+historico_liberar()
+
+Essa organização facilita a manutenção do sistema e torna cada função responsável por uma tarefa específica.
+
+⸻
+
+13. PASSAGEM DE PARÂMETROS
+
+O projeto utiliza passagem de parâmetros por valor e por referência.
+
+13.1 Passagem por valor
+
+Exemplo:
+
+int rotinas_buscar_indice(const ListaRotinas *lista, int id)
+
+O parâmetro id é recebido por valor.
+
+⸻
+
+13.2 Passagem por referência
+
+O uso de ponteiros permite que uma função altere uma estrutura existente.
+
+Exemplo:
+
+void rotinas_iniciar(ListaRotinas *lista)
+
+Nesse caso, o endereço da lista é enviado para a função.
+
+Outro exemplo:
+
+double historico_percentual_por_rotina(
+    const HistoricoPresencas *h,
+    int idRotina,
+    int *total
+)
+
+O parâmetro total utiliza um ponteiro para que a função possa devolver ao chamador a quantidade de registros encontrados.
+
+⸻
+
+14. RECURSIVIDADE
+
+A recursividade é utilizada para percorrer a lista de presenças.
+
+A função:
+
+static int contar_presencas_rec(const Presenca *p)
+
+possui como caso base:
+
+if (p == NULL)
+    return 0;
+
+Quando existe um nó, a função soma 1 caso o registro seja uma presença e chama a si mesma para o próximo nó:
+
+return (p->compareceu ? 1 : 0)
+       + contar_presencas_rec(p->prox);
+
+O processo continua até atingir o final da lista.
+
+A função pública:
+
+historico_presencas_recursivo()
+
+inicia esse percurso a partir do primeiro elemento.
+
+⸻
+
+15. REMOÇÃO DE ROTINAS
+
+A remoção é realizada pela função:
+
+rotinas_remover()
+
+Primeiramente, o sistema procura o índice da rotina através de:
+
+rotinas_buscar_indice()
+
+Depois, os elementos seguintes são deslocados uma posição para a esquerda:
+
+for (int i = idx; i < lista->quantidade - 1; i++)
+    lista->itens[i] = lista->itens[i + 1];
+
+Finalmente:
+
+lista->quantidade--;
+
+A remoção possui complexidade O(n) no pior caso devido ao deslocamento dos elementos.
+
+⸻
+
+16. CÁLCULO DE FREQUÊNCIA
+
+O percentual geral é calculado pela função:
+
+historico_percentual()
+
+A fórmula implementada é:
+
+percentual =
+(total de presenças / total de registros) × 100
+
+O programa verifica primeiro se existem registros:
+
+if (h == NULL || h->totalRegistros == 0)
+    return 0.0;
+
+Essa verificação evita uma divisão por zero.
+
+⸻
+
+17. CÁLCULO POR ROTINA
+
+A função:
+
+historico_percentual_por_rotina()
+
+percorre toda a lista encadeada e considera apenas os registros que possuem o ID da rotina pesquisada.
+
+São contabilizados:
+
+* Número total de registros da rotina;
+* Número de presenças.
+
+Depois é calculado:
+
+percentual =
+presenças da rotina / registros da rotina × 100
+
+A quantidade total de registros também é retornada através do ponteiro total.
+
+⸻
+
+18. INTERFACE DO SISTEMA
+
+A interface principal é controlada pela função:
+
+interface_executar()
+
+O menu disponibiliza as seguintes opções:
+
+1 - Cadastrar rotina de treino
+2 - Listar rotinas cadastradas
+3 - Remover rotina
+4 - Registrar presenca / falta
+5 - Ver historico de registros
+6 - Ver percentual de comparecimento
+0 - Sair
+
+A escolha é processada utilizando uma estrutura switch.
+
+⸻
+
+19. FLUXO PRINCIPAL
+
+O funcionamento geral do sistema pode ser representado da seguinte forma:
+
+                 INÍCIO
+                    |
+                    v
+          Inicializar estruturas
+                    |
+                    v
+             Exibir menu
+                    |
+        +-----------+-----------+
+        |           |           |
+        v           v           v
+    Cadastrar     Listar      Remover
+        |           |           |
+        +-----------+-----------+
+                    |
+                    v
+             Registrar frequência
+                    |
+                    v
+             Exibir histórico
+                    |
+                    v
+           Calcular percentual
+                    |
+                    v
+              Usuário escolhe
+                  "Sair"
+                    |
+                    v
+          Liberar memória dinâmica
+                    |
+                    v
+                   FIM
+
+⸻
+
+20. COMPLEXIDADE DAS PRINCIPAIS OPERAÇÕES
+
+Operação	Estrutura	Complexidade
+Inserir rotina	Vetor	O(1)
+Buscar rotina	Vetor	O(n)
+Remover rotina	Vetor	O(n)
+Listar rotinas	Vetor	O(n)
+Inserir frequência	Lista encadeada	O(1)
+Calcular frequência geral	Lista	O(n)
+Calcular frequência por rotina	Lista	O(n)
+Contagem recursiva	Lista	O(n)
+Liberar histórico	Lista	O(n)
+
+No caso da lista de rotinas, a inserção é feita diretamente na próxima posição disponível. Já a remoção pode exigir o deslocamento dos elementos seguintes.
+
+No histórico, a utilização do ponteiro fim permite inserir um novo registro diretamente no final da lista.
+
+⸻
+
+21. TRATAMENTO DE ERROS
+
+O programa possui diferentes mecanismos de validação.
+
+Lista cheia
+
+if (lista->quantidade >= MAX_ROTINAS)
+    return -2;
+
+Duração inválida
+
+if (duracao <= 0)
+    return -3;
+
+Rotina inexistente
+
+O programa utiliza:
+
+rotinas_buscar_indice()
+
+para verificar se o ID informado existe.
+
+Falha na alocação
+
+if (novo == NULL)
+    return 0;
+
+Registro sem dados
+
+O sistema também verifica se existem registros antes de calcular ou exibir informações de frequência.
+
+⸻
+
+22. GERENCIAMENTO DE MEMÓRIA
+
+O gerenciamento de memória ocorre principalmente no histórico.
+
+Cada registro criado utiliza:
+
+malloc(sizeof(Presenca))
+
+Quando o programa é encerrado, a função:
+
+historico_liberar()
+
+percorre todos os nós e libera cada espaço:
+
+free(p);
+
+Antes de liberar o nó atual, o endereço do próximo nó é armazenado:
+
+Presenca *proximo = p->prox;
+free(p);
+p = proximo;
+
+Isso evita perder a referência para o restante da lista.
+
+Ao final, os ponteiros são redefinidos para NULL.
+
+⸻
+
+23. FUNÇÃO main
+
+A função principal possui uma responsabilidade simples:
+
+int main(void)
+{
+    interface_executar();
+    return 0;
+}
+
+Ela chama a função responsável pela execução da interface.
+
+Essa organização evita colocar toda a lógica do programa dentro da função main.
+
+⸻
+
+24. COMPILAÇÃO
+
+O código pode ser compilado utilizando GCC com:
+
+gcc -Wall -Wextra -std=c11 -g -o academia academia.c
+
+Os parâmetros utilizados são:
+
+* -Wall: ativa diversos avisos do compilador;
+* -Wextra: ativa avisos adicionais;
+* -std=c11: utiliza o padrão C11;
+* -g: adiciona informações para depuração;
+* -o academia: define o nome do executável.
+
+No Linux/macOS:
+
+./academia
+
+No Windows:
+
+academia.exe
+
+⸻
+
+25. EXEMPLO DE UTILIZAÇÃO
+
+Inicialmente, o programa apresenta:
+
+=========== ACADEMIA - CONTROLE DE TREINOS ===========
+1 - Cadastrar rotina de treino
+2 - Listar rotinas cadastradas
+3 - Remover rotina
+4 - Registrar presenca / falta
+5 - Ver historico de registros
+6 - Ver percentual de comparecimento
+0 - Sair
+
+O usuário pode escolher a opção 1 e cadastrar, por exemplo:
+
+Nome da rotina: Treino A - Peito
+Grupo muscular principal: Peito
+Duracao em minutos: 60
+
+O sistema gera automaticamente um ID:
+
+Rotina cadastrada com sucesso! ID = 1
+
+Depois, o usuário pode registrar uma frequência:
+
+ID da rotina prevista para o dia: 1
+Data do treino: 16/09/2026
+Voce compareceu a academia? (s/n): s
+
+O sistema armazenará:
+
+PRESENCA confirmada.
+
+Posteriormente, o percentual será calculado com base nos registros armazenados.
+
+⸻
+
+26. CONCEITOS DE ESTRUTURAS DE DADOS APLICADOS
+
+O projeto demonstra diferentes conceitos estudados na disciplina.
+
+Vetor
+
+Utilizado para armazenar as rotinas:
+
+Rotina itens[MAX_ROTINAS];
+
+Lista encadeada
+
+Utilizada para armazenar o histórico:
+
+struct Presenca *prox;
+
+Ponteiros
+
+Utilizados para manipulação das estruturas e passagem por referência.
+
+Alocação dinâmica
+
+Realizada através de:
+
+malloc()
+
+Liberação de memória
+
+Realizada através de:
+
+free()
+
+Recursividade
+
+Aplicada na função:
+
+contar_presencas_rec()
+
+TAD
+
+Representado pelas estruturas ListaRotinas e HistoricoPresencas e suas respectivas funções de operação.
+
+⸻
+
+27. VANTAGENS DA IMPLEMENTAÇÃO
+
+A implementação apresenta algumas características importantes:
+
+* Organização modular;
+* Separação das responsabilidades;
+* Uso de estruturas de dados diferentes;
+* Aplicação prática de ponteiros;
+* Uso de memória dinâmica;
+* Liberação explícita da memória;
+* Utilização de recursividade;
+* Validação de entradas;
+* Interface simples;
+* Preservação do histórico mesmo após a remoção de uma rotina.
+
+⸻
+
+28. LIMITAÇÕES DO SISTEMA
+
+Apesar de atender aos objetivos acadêmicos, o sistema possui algumas limitações.
+
+1. Os dados não são salvos em arquivos.
+2. Ao fechar o programa, as informações são perdidas.
+3. A quantidade de rotinas é limitada a 50.
+4. A validação da data verifica apenas o tamanho da entrada, não verificando se a data realmente existe.
+5. Não existe cadastro de diferentes usuários.
+6. Não há autenticação.
+7. O sistema possui interface exclusivamente textual.
+
+Essas limitações podem ser utilizadas como oportunidades para futuras versões.
+
+⸻
+
+29. POSSÍVEIS MELHORIAS
+
+Como evolução do projeto, poderiam ser implementados:
+
+* Salvamento das informações em arquivos;
+* Cadastro de usuários;
+* Login;
+* Validação completa de datas;
+* Busca de rotinas por nome;
+* Edição de rotinas;
+* Relatórios mensais;
+* Histórico por período;
+* Ordenação das rotinas;
+* Exportação dos relatórios;
+* Interface gráfica;
+* Banco de dados.
+
+⸻
+
+30. CONCLUSÃO
+
+O projeto Academia – Controle de Treinos e Frequência apresenta uma aplicação prática dos principais conceitos trabalhados na disciplina de Algoritmos e Estrutura de Dados I.
+
+A utilização de um vetor para armazenar as rotinas demonstra o conceito de alocação estática, enquanto o histórico utiliza uma lista simplesmente encadeada com alocação dinâmica.
+
+O projeto também demonstra o uso de ponteiros, passagem de parâmetros por referência, modularização, Tipos Abstratos de Dados e recursividade.
+
+A combinação dessas estruturas permite compreender, na prática, as diferenças entre formas de armazenamento e manipulação de dados.
+
+Além de cumprir os requisitos funcionais propostos, o projeto apresenta uma estrutura organizada, permitindo que novas funcionalidades sejam adicionadas futuramente sem a necessidade de modificar toda a aplicação.
+
+⸻
+
+31. REFERÊNCIAS
+
+* ISO/IEC 9899 – Linguagem de programação C – padrão C11.
+* cppreference.com. Documentação sobre gerenciamento dinâmico de memória em C, incluindo malloc() e free(). (Cppreference)
